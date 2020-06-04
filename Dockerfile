@@ -1,4 +1,5 @@
 FROM maven:3-jdk-8-alpine AS build
+COPY src ./src
 COPY . ./
 RUN mvn clean package -DskipTests
 RUN mkdir app && mv ./target/ayuda-gateway-0.0.1-SNAPSHOT.jar app/gateway.jar
