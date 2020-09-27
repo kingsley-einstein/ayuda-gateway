@@ -1,10 +1,10 @@
-FROM maven:3-jdk-8-alpine AS build
+FROM maven:3.6.3-openjdk-11 AS build
 COPY src ./src
-COPY . ./
+COPY mvnw* ./
+COPY pom.xml ./
 RUN mvn clean package -DskipTests
-RUN mkdir app && mv ./target/ayuda-gateway-0.0.1-SNAPSHOT.jar app/gateway.jar
 
 FROM openjdk:8-jre-alpine
-COPY --from=build app .
+COPY --from=build target/ayuda-gateway-0.0.1-SNAPSHOT.jar ap.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "-DPORT=8080", "-Dspring.profiles.active=production", "gateway.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=production", "-Xmx256m", "-jar", "app.jar"]
